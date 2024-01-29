@@ -1,11 +1,14 @@
 
-from process_data import main_data_processing,vizual
+from process_data import main_data_processing, vizual, send_message
 from datetime import datetime
 import requests
 import telebot
 import os
 from settings import TOKEN, TG_CH
+import logging
 
+# Конфигурирование логгера
+logging.basicConfig(filename='app.log', level=logging.INFO)
 '''Рабочие значения токена'''
 TOKEN = TOKEN
 TG_CH = TG_CH
@@ -41,4 +44,9 @@ def handle_document(message):
    
 if __name__ == "__main__":
     # Запускаем бота
-    bot.polling(none_stop=True)
+    try:
+        bot.polling(none_stop=True)
+    except Exception as e:
+        # Логирование ошибки
+        logging.error(f"Ошибка в тестере стратегий: {str(e)}", exc_info=True)
+        send_message(f"Ошибка в тестере стратегий: {str(e)}", mod = 0)
